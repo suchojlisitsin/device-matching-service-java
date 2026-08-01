@@ -1,6 +1,7 @@
 package com.alexander.devicematcher.repository;
 
 import com.alexander.devicematcher.model.Device;
+import org.springframework.data.aerospike.query.QueryParam;
 import org.springframework.data.aerospike.repository.AerospikeRepository;
 
 import java.util.List;
@@ -11,10 +12,10 @@ public interface DeviceRepository
 
     Optional<Device>
     findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
-            String osName,
-            String osVersion,
-            String browserName,
-            String browserVersion
+            QueryParam osName,
+            QueryParam osVersion,
+            QueryParam browserName,
+            QueryParam browserVersion
     );
 
     List<Device> findAllByOsName(String osName);

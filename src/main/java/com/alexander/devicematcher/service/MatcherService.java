@@ -4,9 +4,14 @@ import com.alexander.devicematcher.model.Device;
 import com.alexander.devicematcher.repository.DeviceRepository;
 import com.alexander.devicematcher.service.parser.ParsedUserAgent;
 import com.alexander.devicematcher.service.parser.UserAgentParser;
+import org.springframework.data.aerospike.query.QueryParam;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
+
+@Service
 public class MatcherService {
 
     private final UserAgentParser userAgentParser;
@@ -25,10 +30,10 @@ public class MatcherService {
                 userAgentParser.getParsedUserAgent(userAgent);
 
         return deviceRepository.findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
-                        parsed.osName(),
-                        parsed.osVersion(),
-                        parsed.browserName(),
-                        parsed.browserVersion()
+                        QueryParam.of(parsed.osName()),
+                QueryParam.of(parsed.osVersion()),
+                QueryParam.of(parsed.browserName()),
+                QueryParam.of(parsed.browserVersion())
                 )
                 .map(existing -> {
                     existing.setHitCount(existing.getHitCount() + 1);
@@ -47,5 +52,21 @@ public class MatcherService {
 
                     return deviceRepository.save(device);
                 });
+    }
+    public Device getDeviceById(String id) {
+        return deviceRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Device not found with ID: " + id
+                        )
+                );
+    }
+
+    public List<Device> getDevicesByOsName(String osName) {
+        return deviceRepository.findAllByOsName(osName);
+    }
+
+    public void deleteDevices(List<String> ids) {
+        deviceRepository.deleteAllById(ids);
     }
 }

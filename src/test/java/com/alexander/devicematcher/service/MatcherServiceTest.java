@@ -10,11 +10,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.aerospike.query.QueryParam;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -44,17 +46,16 @@ class MatcherServiceTest {
         when(userAgentParser.getParsedUserAgent(userAgent))
                 .thenReturn(parsedUserAgent);
 
-        when(deviceRepository.findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
-                "Windows",
-                "10.0",
-                "Chrome",
-                "138.0.0"
-        )).thenReturn(Optional.empty());
+        when(deviceRepository
+                .findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
+                        any(QueryParam.class),
+                        any(QueryParam.class),
+                        any(QueryParam.class),
+                        any(QueryParam.class)
+                ))
+                .thenReturn(Optional.empty());
 
-        ArgumentCaptor<Device> deviceCaptor =
-                ArgumentCaptor.forClass(Device.class);
-
-        when(deviceRepository.save(deviceCaptor.capture()))
+        when(deviceRepository.save(any(Device.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         Device result = deviceMatchingService.matchDevice(userAgent);
@@ -66,16 +67,30 @@ class MatcherServiceTest {
         assertEquals("Chrome", result.getBrowserName());
         assertEquals("138.0.0", result.getBrowserVersion());
 
-        verify(userAgentParser).getParsedUserAgent(userAgent);
+        verify(userAgentParser)
+                .getParsedUserAgent(userAgent);
 
-        verify(deviceRepository).findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
-                "Windows",
-                "10.0",
-                "Chrome",
-                "138.0.0"
-        );
+        verify(deviceRepository)
+                .findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
+                        any(QueryParam.class),
+                        any(QueryParam.class),
+                        any(QueryParam.class),
+                        any(QueryParam.class)
+                );
 
-        verify(deviceRepository).save(deviceCaptor.getValue());
+        ArgumentCaptor<Device> deviceCaptor =
+                ArgumentCaptor.forClass(Device.class);
+
+        verify(deviceRepository).save(deviceCaptor.capture());
+
+        Device savedDevice = deviceCaptor.getValue();
+
+        assertNotNull(savedDevice.getId());
+        assertEquals(1, savedDevice.getHitCount());
+        assertEquals("Windows", savedDevice.getOsName());
+        assertEquals("10.0", savedDevice.getOsVersion());
+        assertEquals("Chrome", savedDevice.getBrowserName());
+        assertEquals("138.0.0", savedDevice.getBrowserVersion());
     }
 
     @Test
@@ -100,12 +115,14 @@ class MatcherServiceTest {
         when(userAgentParser.getParsedUserAgent(userAgent))
                 .thenReturn(parsedUserAgent);
 
-        when(deviceRepository.findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
-                "Windows",
-                "10.0",
-                "Chrome",
-                "138.0.0"
-        )).thenReturn(Optional.of(existingDevice));
+        when(deviceRepository
+                .findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
+                        any(QueryParam.class),
+                        any(QueryParam.class),
+                        any(QueryParam.class),
+                        any(QueryParam.class)
+                ))
+                .thenReturn(Optional.of(existingDevice));
 
         when(deviceRepository.save(existingDevice))
                 .thenReturn(existingDevice);
@@ -114,15 +131,21 @@ class MatcherServiceTest {
 
         assertEquals("device-123", result.getId());
         assertEquals(5, result.getHitCount());
+        assertEquals("Windows", result.getOsName());
+        assertEquals("10.0", result.getOsVersion());
+        assertEquals("Chrome", result.getBrowserName());
+        assertEquals("138.0.0", result.getBrowserVersion());
 
-        verify(userAgentParser).getParsedUserAgent(userAgent);
+        verify(userAgentParser)
+                .getParsedUserAgent(userAgent);
 
-        verify(deviceRepository).findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
-                "Windows",
-                "10.0",
-                "Chrome",
-                "138.0.0"
-        );
+        verify(deviceRepository)
+                .findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
+                        any(QueryParam.class),
+                        any(QueryParam.class),
+                        any(QueryParam.class),
+                        any(QueryParam.class)
+                );
 
         verify(deviceRepository).save(existingDevice);
     }
