@@ -1,17 +1,21 @@
 package com.alexander.devicematcher.repository;
 
 import com.alexander.devicematcher.model.Device;
+import org.springframework.data.aerospike.repository.AerospikeRepository;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface DeviceRepository {
+public interface DeviceRepository
+        extends AerospikeRepository<Device, String> {
 
-    Optional<Device> findMatchingDevice(
+    Optional<Device>
+    findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
             String osName,
             String osVersion,
             String browserName,
             String browserVersion
     );
 
-    Device save(Device device);
+    List<Device> findAllByOsName(String osName);
 }

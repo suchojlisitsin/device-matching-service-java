@@ -44,7 +44,7 @@ class MatcherServiceTest {
         when(userAgentParser.getParsedUserAgent(userAgent))
                 .thenReturn(parsedUserAgent);
 
-        when(deviceRepository.findMatchingDevice(
+        when(deviceRepository.findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
                 "Windows",
                 "10.0",
                 "Chrome",
@@ -68,7 +68,7 @@ class MatcherServiceTest {
 
         verify(userAgentParser).getParsedUserAgent(userAgent);
 
-        verify(deviceRepository).findMatchingDevice(
+        verify(deviceRepository).findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
                 "Windows",
                 "10.0",
                 "Chrome",
@@ -100,7 +100,7 @@ class MatcherServiceTest {
         when(userAgentParser.getParsedUserAgent(userAgent))
                 .thenReturn(parsedUserAgent);
 
-        when(deviceRepository.findMatchingDevice(
+        when(deviceRepository.findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
                 "Windows",
                 "10.0",
                 "Chrome",
@@ -117,7 +117,7 @@ class MatcherServiceTest {
 
         verify(userAgentParser).getParsedUserAgent(userAgent);
 
-        verify(deviceRepository).findMatchingDevice(
+        verify(deviceRepository).findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
                 "Windows",
                 "10.0",
                 "Chrome",

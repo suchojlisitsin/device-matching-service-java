@@ -1,15 +1,16 @@
 package com.alexander.devicematcher.service.parser;
 
+import org.springframework.stereotype.Component;
 import ua_parser.Client;
 import ua_parser.Parser;
 
 
+@Component
 public class UserAgentParser {
 
     private final Parser parser;
 
     public UserAgentParser() {
-
         parser = new Parser();
     }
 
@@ -17,29 +18,18 @@ public class UserAgentParser {
         Client client = parser.parse(userAgent);
 
         String osName = client.os.family;
-
-        String osVersion = "";
-        if (client.os.major != null) {
-            osVersion += client.os.major;
-        }
-        if (client.os.minor != null) {
-            osVersion += "." + client.os.minor;
-        }
+        String osVersion = buildVersion(
+                client.os.major,
+                client.os.minor,
+                client.os.patch
+        );
 
         String browserName = client.userAgent.family;
-
-        String browserVersion = "";
-        if (client.userAgent.major != null) {
-            browserVersion += client.userAgent.major;
-        }
-        if (client.userAgent.minor != null) {
-            browserVersion += "." + client.userAgent.minor;
-        }
-        if (client.userAgent.patch != null) {
-            browserVersion += "." + client.userAgent.patch;
-        }
-
-        System.out.println(client);
+        String browserVersion = buildVersion(
+                client.userAgent.major,
+                client.userAgent.minor,
+                client.userAgent.patch
+        );
 
         return new ParsedUserAgent(
                 osName,
@@ -47,5 +37,27 @@ public class UserAgentParser {
                 browserName,
                 browserVersion
         );
+    }
+
+    private String buildVersion(
+            String major,
+            String minor,
+            String patch
+    ) {
+        StringBuilder version = new StringBuilder();
+
+        if (major != null && !major.isBlank()) {
+            version.append(major);
+        }
+
+        if (minor != null && !minor.isBlank()) {
+            version.append(".").append(minor);
+        }
+
+        if (patch != null && !patch.isBlank()) {
+            version.append(".").append(patch);
+        }
+
+        return version.toString();
     }
 }
