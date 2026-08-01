@@ -1,3 +1,13 @@
 spring:
   application:
     name: device-matcher
+
+  aerospike:
+    hosts: localhost:4500
+
+  data:
+    aerospike:
+      namespace: test
+      scans-enabled: true
+      create-indexes-on-startup: true
+      send-key: true

@@ -1,7 +1,26 @@
 package com.alexander.devicematcher.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.aerospike.mapping.Document;
+
+@Document(collection = "devices")
 public class Device {
+
+    @Id
     private String id;
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "id='" + id + '\'' +
+                ", hitCount=" + hitCount +
+                ", osName='" + osName + '\'' +
+                ", osVersion='" + osVersion + '\'' +
+                ", browserName='" + browserName + '\'' +
+                ", browserVersion='" + browserVersion + '\'' +
+                '}';
+    }
+
     private int hitCount;
     private String osName;
     private String osVersion;

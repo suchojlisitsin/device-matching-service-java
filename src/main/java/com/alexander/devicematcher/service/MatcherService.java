@@ -24,7 +24,7 @@ public class MatcherService {
         ParsedUserAgent parsed =
                 userAgentParser.getParsedUserAgent(userAgent);
 
-        return deviceRepository.findMatchingDevice(
+        return deviceRepository.findByOsNameAndOsVersionAndBrowserNameAndBrowserVersion(
                         parsed.osName(),
                         parsed.osVersion(),
                         parsed.browserName(),
