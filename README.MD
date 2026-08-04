@@ -24,6 +24,8 @@ Change host, port and namespace to fit your configuration.
 
 ## Project
 ### IDE
+Start the AerospikeInstance.
+Running DeviceMatcherApplication.java will run the project.
 ### Terminal
 ```bash
 mvn spring-boot:run
@@ -33,6 +35,11 @@ mvn spring-boot:run
 
 ## Tests
 ### IDE
+The tests can be ran seperately:
+- UserAgentParserTest.java is a JUnit Unit test
+- MatcherServiceTest is a Mockito Unit test
+- DeviceControllerTest is a MockMvc test for the REST API
+- ServiceIntegrationTest is an integration test (Aerospike instance must be already running)
 ### Terminal
 ```bash
 mvn test
