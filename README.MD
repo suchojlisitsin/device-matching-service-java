@@ -7,7 +7,7 @@
 - Aerospike instance
 
 ## Configuration
-The project uses Aerospike and expects the following:
+The project uses Aerospike and expects the following in application.yaml:
 ```yaml
 spring:
   aerospike:
