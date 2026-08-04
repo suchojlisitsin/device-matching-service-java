@@ -24,7 +24,7 @@ Change host, port and namespace to fit your configuration.
 
 ## Project
 ### IDE
-Start the AerospikeInstance.
+Start the Aerospike instance.
 Running DeviceMatcherApplication.java will run the project.
 ### Terminal
 ```bash
