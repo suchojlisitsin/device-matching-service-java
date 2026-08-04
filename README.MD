@@ -25,7 +25,7 @@ Change host, port and namespace to fit your configuration.
 ## Project
 ### IDE
 Start the Aerospike instance.
-Running DeviceMatcherApplication.java will run the project.
+Run DeviceMatcherApplication.java.
 ### Terminal
 ```bash
 mvn spring-boot:run
@@ -44,3 +44,10 @@ The tests can be ran seperately:
 ```bash
 mvn test
 ```
+
+## API Routes
+
+- POST `/api/devices/match`
+- GET `/api/devices/{id}`
+- GET `/api/devices?osName={osName}`
+- DELETE `/api/devices?ids={id1}` or `/api/devices?ids={id1}&ids={id2}&...&ids={idN}`
