@@ -1,6 +1,5 @@
 package com.alexander.devicematcher.controller;
 
-import com.alexander.devicematcher.dto.DeleteDevicesRequest;
 import com.alexander.devicematcher.dto.DeviceResponse;
 import com.alexander.devicematcher.dto.MatchDeviceRequest;
 import com.alexander.devicematcher.model.Device;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -61,11 +61,20 @@ public class DeviceController {
         return ResponseEntity.ok(devices);
     }
 
+
     @DeleteMapping
     public ResponseEntity<Void> deleteDevices(
-            @Valid @RequestBody DeleteDevicesRequest request
+            //RequestParam instead of RequestBody as the docs discourage bodies in DELETE
+            @RequestParam List<String> ids
     ) {
-        matcherService.deleteDevices(request.ids());
+        if (ids.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "At least one device ID is required"
+            );
+        }
+
+        matcherService.deleteDevices(ids);
 
         return ResponseEntity.noContent().build();
     }
