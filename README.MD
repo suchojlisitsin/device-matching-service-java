@@ -36,7 +36,7 @@ mvn spring-boot:run
 ## Tests
 ### IDE
 The tests can be ran seperately:
-- UserAgentParserTest.java is a JUnit Unit test
+- UserAgentParserTest is a JUnit Unit test
 - MatcherServiceTest is a Mockito Unit test
 - DeviceControllerTest is a MockMvc test for the REST API
 - ServiceIntegrationTest is an integration test (Aerospike instance must be already running)
